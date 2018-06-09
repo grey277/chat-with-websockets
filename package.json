@@ -1,0 +1,30 @@
+{
+  "description": "Chat application",
+  "version": "0.0.1",
+  "author": "Kamil Rakoczy",
+  "dependencies": {
+    "socket.io": "*",
+    "node-static": "*",
+    "socket.io-client": "*",
+    "uglify-js": "*",
+    "express": "*",
+    "ejs": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "cookie-parser": "*",
+    "express-session": "*",
+    "mongoose": "*",
+    "bcrypt-nodejs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "xss-filters": "*"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "subdomain": "",
+  "scripts": {
+    "start": "./server.js"
+  },
+  "name": "chat"
+}

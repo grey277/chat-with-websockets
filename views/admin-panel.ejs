@@ -1,0 +1,60 @@
+<!-- views/signup.ejs -->
+<!doctype html>
+<html>
+
+<head>
+  <title>Chat panel</title>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <style>
+    body {
+      padding-top: 80px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>
+      History
+    </h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">User Name</th>
+          <th scope="col">Message type</th>
+          <th scope="col">Message</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% messages.forEach(function (message) { %>
+          <tr>
+            <td>
+              <%= message.nickname %>
+            </td>
+            <td>
+              <%= message.message_type %>
+            </td>
+            <td>
+              <% if (message.message_type === 'image_message') { %>
+                <img src="<%= message.message %>" />
+                <% } else { %>
+                  <%= message.message %>
+                    <% } %>
+            </td>
+            <td>
+              <form action="/delete/<%=message._id %>" method="get">
+                <button type="submit" class="btn">DELETE</button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>
