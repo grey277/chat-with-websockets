@@ -1,4 +1,3 @@
-<!-- views/signup.ejs -->
 <!doctype html>
 <html>
 
@@ -18,42 +17,15 @@
 <body>
   <div class="container">
     <h1>
-      History
+      Admin panel
     </h1>
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">User Name</th>
-          <th scope="col">Message type</th>
-          <th scope="col">Message</th>
-          <th scope="col">Action</th>
+          <th scope="col"><a href="/admin-panel-messages">Messages</a></th>
+          <th scope="col"><a href="/admin-panel-users">Users</a></th>
         </tr>
       </thead>
-      <tbody>
-        <% messages.forEach(function (message) { %>
-          <tr>
-            <td>
-              <%= message.nickname %>
-            </td>
-            <td>
-              <%= message.message_type %>
-            </td>
-            <td>
-              <% if (message.message_type === 'image_message') { %>
-                <img src="<%= message.message %>" />
-                <% } else { %>
-                  <%= message.message %>
-                    <% } %>
-            </td>
-            <td>
-              <form action="/delete/<%=message._id %>" method="get">
-                <button type="submit" class="btn">DELETE</button>
-              </form>
-            </td>
-          </tr>
-          <% }) %>
-      </tbody>
-    </table>
   </div>
 </body>
 

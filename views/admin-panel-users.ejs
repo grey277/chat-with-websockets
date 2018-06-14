@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Chat panel</title>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <style>
+    body {
+      padding-top: 80px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>
+      Users
+    </h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">User Name</th>
+          <th scope="col">Is Admin</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(function (user) { %>
+          <tr>
+            <td>
+              <%= user.local.email %>
+            </td>
+            <td>
+              <%= user.local.admin %>
+            </td>
+            <td>
+              <form action="/delete-user/<%=user._id %>" method="get">
+                <button type="submit" class="btn">DELETE</button>
+              </form>
+              <% if (!user.local.admin) { %>
+                <form action="/promote-admin/<%=user._id %>" method="get">
+                  <button type="submit" class="btn">Promote to admin</button>
+                </form>
+              <% } else { %>
+                <form action="/demote-admin/<%=user._id %>" method="get">
+                  <button type="submit" class="btn">Demote admin</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

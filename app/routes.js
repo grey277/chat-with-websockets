@@ -1,6 +1,6 @@
 module.exports = function (app, passport, io) {
   var Message = require('../app/models/message');
-
+  var User = require('../app/models/user');
   app.get('/', function (req, res) {
     res.render('index.ejs'); // load the index.ejs file
   });
@@ -19,23 +19,64 @@ module.exports = function (app, passport, io) {
     });
   });
 
-  app.get('/chat', isLoggedIn, function (req, res) {
+  app.get('/chat', isLoggedIn(), function (req, res) {
     res.render('chat.ejs', {user: req.user});
   });
 
-  app.get('/admin-panel', isSuperUser, function (req, res) {
-    Message
+  function isLoggedIn() {
+    return function (req, res, next) {
+      if (req !== undefined && req.isAuthenticated()) {
+        return next();
+      }
+
+      if (res !== undefined) {
+        res.redirect('/');
+      }
+    };
+  }
+
+  app
+    .get('/admin-panel-messages', requireAdmin(), function (req, res) {
+      Message
+        .find()
+        .exec(function (err, messages) {
+          if (err) 
+            throw err
+          res.render('admin-panel-messages.ejs', {
+            user: req.user,
+            messages: messages
+          });
+        });
+    });
+
+  app.get('/admin-panel-users', requireAdmin(), function (req, res) {
+    User
       .find()
-      .exec(function (err, messages) {
+      .exec(function (err, users) {
         if (err) 
           throw err
-        res.render('admin-panel.ejs', {
-          user: req.user,
-          messages: messages
-        });
+        res.render('admin-panel-users.ejs', {users: users});
       });
-
   });
+
+  app.get('/admin-panel', requireAdmin(), function (req, res) {
+    res.render('admin-panel.ejs')
+  });
+
+  function requireAdmin() {
+    return function (req, res, next) {
+      if (req.user === undefined || !req.user) {
+        res.redirect('/');
+        return;
+      }
+      var user = req.user;
+      if (!user.local.admin) {
+        res.redirect('/');
+        return;
+      }
+      next();
+    };
+  };
 
   app.get('/logout', function (req, res) {
     req.logout();
@@ -57,13 +98,49 @@ module.exports = function (app, passport, io) {
   }));
 
   app.get('/delete/:id', function (req, res) {
-    console.log("ID: " + req.params.id)
     Message
       .remove({"_id": req.params.id})
       .exec(function (err) {
         if (err) 
           throw err
-        res.redirect('/admin-panel');
+        res.redirect('/admin-panel-messages');
+      });
+  });
+
+  app.get('/promote-admin/:id', function (req, res) {
+    User
+      .findOne({"_id": req.params.id})
+      .exec(function (err, user) {
+        if (err) 
+          throw err
+        user.local.admin = true;
+        User.update({
+          "_id": req.params.id
+        }, user)
+          .exec(function (err) {
+            if (err) 
+              throw err
+            res.redirect('/admin-panel-users');
+          });
+      });
+
+  });
+
+  app.get('/demote-admin/:id', function (req, res) {
+    User
+      .findOne({"_id": req.params.id})
+      .exec(function (err, user) {
+        if (err) 
+          throw err
+        user.local.admin = false;
+        User.update({
+          "_id": req.params.id
+        }, user)
+          .exec(function (err) {
+            if (err) 
+              throw err
+            res.redirect('/admin-panel-users');
+          });
       });
   });
 
@@ -151,15 +228,3 @@ module.exports = function (app, passport, io) {
     });
 
 };
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) 
-    return next();
-  
-  res.redirect('/');
-}
-
-function isSuperUser(req, res, next) {
-  return next();
-
-}

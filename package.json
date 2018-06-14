@@ -24,7 +24,8 @@
   },
   "subdomain": "",
   "scripts": {
-    "start": "./server.js"
+    "start": "node server.js",
+    "debug": "node --inspect server.js "
   },
   "name": "chat"
 }
