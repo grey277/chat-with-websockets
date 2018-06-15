@@ -15,3 +15,9 @@ Application contains 3 main folders: views, config and app and starting script s
  - config folder contains configuration scripts for database and passportjs user authenticator.
  - app folder contains static served css/js, database models and routes configuration.
  - server.js script contains starting configuration of web server and web socket server
+
+ # Database model
+ Database contains 2 collections: users and messages:
+  - users collection contains: user email, hashed and encrypted user password, user privilage
+  - messages collection contains: user email, message type and message
+
