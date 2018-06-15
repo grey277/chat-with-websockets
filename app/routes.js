@@ -155,20 +155,6 @@ module.exports = function (app, passport, io) {
       .replace(/"/g, '&quot;');
   }
 
-  var colors = [
-    'red',
-    'green',
-    'blue',
-    'magenta',
-    'purple',
-    'plum',
-    'orange'
-  ];
-
-  colors.sort(function (a, b) {
-    return Math.random() > 0.5;
-  });
-
   io
     .sockets
     .on('connection', function (socket) {
